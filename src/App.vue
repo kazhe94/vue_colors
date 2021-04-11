@@ -3,9 +3,8 @@
 </template>
 
 <style lang="scss">
-@import url(~normalize.css);
   :root {
-    --color-primary: #1F2020;
+    --color-primary: #1f2020;
     --color-secondary: #7BB899;
     --color-white: #ffffff;
   }
@@ -25,6 +24,9 @@
     margin: 0;
     padding: 0;
   }
+  button {
+    padding: 0;
+  }
   address {
     font-style: normal;
   }
@@ -39,5 +41,9 @@
     margin: 0 auto;
     width: 100%;
     padding: 0 20px;
+  }
+  .no-scroll {
+    height: 100%;
+    overflow: hidden;
   }
 </style>

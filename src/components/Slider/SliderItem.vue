@@ -15,13 +15,17 @@ export default {
 }
 </script>
 
-<style scoped>
+<style scoped lang="scss">
   .slider__item {
     height: 560px;
     color: #ffffff;
     display: flex;
     justify-content: center;
     align-items: center;
+    background-size: cover;
+    @media (max-width: 1089px){
+      height: 400px;
+    }
   }
   .slider__title {
     margin-bottom: 24px;
