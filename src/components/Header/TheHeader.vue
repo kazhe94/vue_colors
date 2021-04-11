@@ -45,7 +45,7 @@
           <a href="#"></a>
         </li>
         <li class="header__controls-item header__controls-item--cart">
-          <a href="#">0</a>
+          <a href="#" @click.prevent="$emit('openCart')">0</a>
         </li>
       </ul>
     </div>

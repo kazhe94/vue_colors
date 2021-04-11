@@ -1,5 +1,5 @@
 <template>
-  <the-header></the-header>
+  <the-header @openCart="cart = true"></the-header>
   <the-slider></the-slider>
   <div class="container">
     <div class="page-title">Краски</div>
@@ -27,10 +27,16 @@
     </div>
   </div>
   <teleport to="body">
-    <app-backdrop v-if="filter" @close="filter = false"></app-backdrop>
+    <app-backdrop v-if="filter || cart" @close="filter = false"></app-backdrop>
   </teleport>
   <teleport to="body">
-    <the-cart></the-cart>
+    <transition name="slide">
+      <the-cart
+          v-if="cart"
+          @closeCart="cart = false"
+      >
+      </the-cart>
+    </transition>
   </teleport>
   <footer class="footer"></footer>
 </template>
@@ -58,8 +64,10 @@ export default {
   },
   setup() {
     const filter = ref(false)
+    const cart = ref(false)
     return {
       filter,
+      cart
     }
   }
 }
@@ -150,5 +158,17 @@ export default {
 .footer {
   height: 312px;
   background-color: #000;
+}
+.slide-enter-active {
+  transition: all 0.5s ease-out;
+}
+
+.slide-leave-active {
+  transition: 0.5s ease-in;
+}
+
+.slide-enter-from,
+.slide-leave-to {
+  transform: translateX(100%);
 }
 </style>

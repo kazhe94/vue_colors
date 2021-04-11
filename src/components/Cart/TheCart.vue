@@ -2,7 +2,7 @@
   <div class="cart">
     <div class="cart__top">
       <h2 class="cart__title">Корзина</h2>
-      <button class="cart__close">
+      <button class="cart__close" @click="$emit('closeCart')">
         <span></span>
       </button>
     </div>
@@ -16,6 +16,13 @@
         <cart-item></cart-item>
         <cart-item></cart-item>
       </div>
+    </div>
+    <div class="cart__summary">
+      <div class="cart__summary-text">
+        <div class="cart__summary-title">Итого</div>
+        <div class="cart__summary-total">14 400₽</div>
+      </div>
+      <div class="cart__summary-btn">Оформить заказ</div>
     </div>
   </div>
 </template>
@@ -105,6 +112,42 @@ export default {
       transition: 0.3s;
       &:hover {
         border-color: rgba(#000, 0.4);
+      }
+    }
+    &__summary {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      padding: 0 40px 40px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      &-title {
+        font-size: 16px;
+        margin-bottom: 6px;
+      }
+      &-total {
+        font-size: 30px;
+        font-weight: 500;
+        line-height: 1;
+      }
+      &-btn {
+        width: 240px;
+        height: 56px;
+        text-align: center;
+        text-transform: uppercase;
+        line-height: 56px;
+        background-color: var(--color-secondary);
+        border: none;
+        border-radius: 4px;
+        font-size: 12px;
+        font-weight: 500;
+        cursor: pointer;
+        transition: 0.3s;
+        &:hover {
+          opacity: 0.8;
+        }
       }
     }
   }
