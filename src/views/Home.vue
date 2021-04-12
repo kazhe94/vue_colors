@@ -6,28 +6,35 @@
   </div>
   <div class="products">
     <div class="container">
-      <app-filter :filter="filter"></app-filter>
+      <app-filter
+          :filterOpened="filterOpened"
+          v-model="filter"
+      ></app-filter>
       <div class="products__wrap">
         <div class="products__props">
-          <div class="products__count">412 товаров</div>
-          <a href="#" class="products__filter" @click.prevent="filter = true">Фильтры</a>
+          <div class="products__count">{{ products.length }} товаров</div>
+          <a href="#" class="products__filter" @click.prevent="filterOpened = true">Фильтры</a>
           <div class="products__sort">
-            <select id="price">
-              <option value="cheap">Сначала недорогие</option>
-              <option value="expensive">Сначала дорогие</option>
-              <option value="popular">Сначала популярные</option>
-              <option value="new">Сначала новые</option>
-            </select>
+            <app-sort
+                :options="options"
+                v-model="sort"
+                :optionOpened="optionOpened"
+                @closeSort="optionOpened = false"
+            ></app-sort>
           </div>
         </div>
         <ul class="products__grid">
-          <app-product v-for="item in 15"></app-product>
+          <app-product
+              v-for="item in products"
+              :key="item.id"
+              :product="item"
+          ></app-product>
         </ul>
       </div>
     </div>
   </div>
   <teleport to="body">
-    <app-backdrop v-if="filter || cart" @close="filter = false"></app-backdrop>
+    <app-backdrop v-if="filterOpened || cart" @close="filterOpened = false"></app-backdrop>
   </teleport>
   <teleport to="body">
     <transition name="slide">
@@ -49,8 +56,10 @@ import TheSlider from "@/components/Slider/TheSlider";
 import AppProduct from "@/components/Products/AppProduct";
 import AppFilter from "@/components/Products/AppFilter";
 import AppBackdrop from "@/components/UI/AppBackdrop";
-import {ref, watch} from "vue";
+import {computed, ref, watch} from "vue";
 import TheCart from "@/components/Cart/TheCart";
+import AppSort from "@/components/Products/AppSort";
+import {useStore} from "vuex";
 
 export default {
   name: 'Home',
@@ -60,14 +69,41 @@ export default {
     AppProduct,
     AppFilter,
     AppBackdrop,
-    TheCart
+    TheCart,
+    AppSort
   },
   setup() {
-    const filter = ref(false)
+    const store = useStore()
+    const filterOpened = ref(false)
+    const optionOpened = ref(false)
     const cart = ref(false)
+    const filter = ref({
+      news: false,
+      inStock: false,
+      contract: false,
+      exclusive: false,
+      sale: false
+    })
+    const sort = ref({
+      text: 'Сначала дорогие',
+      value: 'expensive'
+    })
+    const options = [
+      {text: 'Сначала недорогие', value: 'cheap'},
+      {text: 'Сначала дорогие', value: 'expensive'},
+      {text: 'Сначала популярные', value: 'popular'},
+      {text: 'Сначала новые', value: 'new'},
+    ]
+    const products = computed(() => store.getters['products/products'])
+    console.log(products.value)
     return {
+      filterOpened,
+      cart,
+      options,
+      sort,
       filter,
-      cart
+      optionOpened,
+      products
     }
   }
 }
@@ -77,14 +113,14 @@ export default {
   display: none;
   margin: 48px 0;
   font-size: 36px;
-  @media (max-width: 778px) {
+  @media (max-width: 840px) {
     display: block;
   }
 }
 .products {
   padding-top: 72px;
   padding-bottom: 140px;
-  @media (max-width: 778px) {
+  @media (max-width: 840px) {
     padding-bottom: 64px;
     padding-top: 0;
   }
@@ -96,7 +132,10 @@ export default {
     width: 100%;
     margin-right: 0;
     margin-left: 138px;
-    @media (max-width: 778px) {
+    @media (max-width: 1225px) {
+      margin-left: 50px;
+    }
+    @media (max-width: 840px) {
       margin-left: 0;
     }
   }
@@ -108,7 +147,7 @@ export default {
     font-size: 12px;
   }
   &__count {
-    @media (max-width: 778px) {
+    @media (max-width: 840px) {
       display: none;
     }
   }
@@ -119,7 +158,7 @@ export default {
     text-transform: uppercase;
     font-weight: 500;
     font-size: 12px;
-    @media (max-width: 778px) {
+    @media (max-width: 840px) {
       display: block;
     }
   }
@@ -129,6 +168,11 @@ export default {
     grid-column-gap: 24px;
     justify-content: center;
     grid-row-gap: 33px;
+    @media (max-width: 1225px) {
+      grid-column-gap: 15px;
+      grid-row-gap: 24px;
+      grid-template-columns: repeat(auto-fit, 156px);
+    }
   }
   @media (min-width: 1830px) {
     li:nth-child(5n+1):nth-last-child(-n+5),
@@ -138,15 +182,31 @@ export default {
       }
     }
   }
-  @media (min-width: 1224px) {
-    li:nth-child(4n+1):nth-last-child(-n+4),
-    li:nth-child(4n+1):nth-last-child(-n+4) ~ li {
+  @media (min-width: 1226px) {
+    li:nth-child(3n+1):nth-last-child(-n+3),
+    li:nth-child(3n+1):nth-last-child(-n+3) ~ li {
       &::after {
         display: none;
       }
     }
   }
-  @media (max-width: 1224px) {
+  @media (min-width: 1095px) and (max-width: 1226px) {
+    li:nth-child(5n+1):nth-last-child(-n+5),
+    li:nth-child(5n+1):nth-last-child(-n+5) ~ li {
+      &::after {
+        display: none;
+      }
+    }
+  }
+  @media (min-width: 538px) and (max-width: 1095px){
+    li:nth-child(3n+1):nth-last-child(-n+3),
+    li:nth-child(3n+1):nth-last-child(-n+3) ~ li {
+      &::after {
+        display: none;
+      }
+    }
+  }
+  @media (min-width: 367px) {
     li:nth-child(2n+1):nth-last-child(-n+2),
     li:nth-child(2n+1):nth-last-child(-n+2) ~ li {
       &::after {

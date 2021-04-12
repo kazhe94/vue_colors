@@ -1,9 +1,9 @@
 <template>
   <div class="cart-controls">
     <div class="cart-controls__count">
-      <button class="cart-controls__btn">-</button>
-      <div class="cart-controls__quantity">0</div>
-      <button class="cart-controls__btn">+</button>
+      <button class="cart-controls__btn" @click="remove">-</button>
+      <div class="cart-controls__quantity">{{ count }}</div>
+      <button class="cart-controls__btn" @click="add">+</button>
     </div>
     <button class="cart-controls__remove">
       <span></span>
@@ -12,8 +12,24 @@
 </template>
 
 <script>
+import {useStore} from "vuex";
+
 export default {
-name: "CartControls"
+  name: "CartControls",
+  props: ['count', 'id'],
+  setup(props) {
+    const store = useStore()
+    const add = () => {
+      store.commit('cart/add', props.id)
+    }
+    const remove = () => {
+      store.commit('cart/remove', props.id)
+    }
+    return {
+      add,
+      remove
+    }
+  }
 }
 </script>
 
@@ -35,6 +51,10 @@ name: "CartControls"
       border: none;
       border-radius: 4px;
       cursor: pointer;
+      transition: 0.3s;
+      &:hover {
+        background-color: var(--color-secondary);
+      }
     }
     &__quantity {
       margin: 0 20px;

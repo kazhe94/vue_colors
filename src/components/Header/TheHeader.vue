@@ -28,6 +28,20 @@
           <li class="header__nav-item">
             <a href="" class="header__nav-link">Найти магазин</a>
           </li>
+          <ul class="mobile-links">
+            <li class="header__controls-item--search">
+              <a href="#"><span>Поиск</span></a>
+            </li>
+            <li class="header__controls-item--profile">
+              <a href="#"><span>Профиль</span></a>
+            </li>
+            <li class="header__controls-item--faves">
+              <a href="#"><span>Избранное</span></a>
+            </li>
+            <li>
+              <a href="tel:+74952217769" class="header__phone phone">+7 (495) 221-77-69</a>
+            </li>
+          </ul>
         </ul>
       </nav>
       <address class="header__contacts">
@@ -45,7 +59,7 @@
           <a href="#"></a>
         </li>
         <li class="header__controls-item header__controls-item--cart">
-          <a href="#" @click.prevent="$emit('openCart')">0</a>
+          <a href="#" @click.prevent="$emit('openCart')">{{ cartCount }}</a>
         </li>
       </ul>
     </div>
@@ -53,20 +67,50 @@
 </template>
 
 <script>
-import {ref, watch} from 'vue'
+import {computed, ref} from 'vue'
+import {useStore} from "vuex";
 export default {
   name: "TheHeader",
 
   setup() {
+    const store = useStore()
     const burger = ref(false)
+    const cartCount = computed(() => store.getters['cart/cartCount'])
+    console.log(cartCount.value)
     return {
-      burger
+      burger,
+      cartCount
     }
   },
 }
 </script>
 
 <style lang="scss">
+  .mobile-links {
+    display: none;
+    text-align: center;
+    @media (max-width: 1089px) {
+      display: block;
+    }
+    li {
+      margin-bottom: 20px;
+      border-bottom: 1px solid transparent;
+      transition: 0.3s;
+      &:last-child {
+        margin-bottom: 0;
+      }
+      &:hover {
+        border-color: var(--color-primary);
+      }
+      .phone {
+        padding-left: 0;
+      }
+    }
+    li a {
+      background-position: left;
+      padding-left: 30px;
+    }
+  }
   .burger-menu {
     position: relative;
     display: none;
@@ -136,6 +180,9 @@ export default {
     &__logo {
       img {
         display: block;
+        @media (max-width: 1089px) {
+          height: 21px;
+        }
       }
     }
     &__nav {
@@ -149,7 +196,7 @@ export default {
         position: fixed;
         left: -100%;
         padding: 30px;
-        top: 78px;
+        top: 64px;
         z-index: 10;
         width: 100%;
         margin-left: 0;
@@ -166,13 +213,11 @@ export default {
       @media (max-width: 1089px){
         flex-direction: column;
         align-items: center;
-
       }
     }
     &__nav-item {
       border-bottom: 1px solid transparent;
       transition: 0.3s;
-      padding-bottom: 3px;
       &:hover {
         border-color: var(--color-primary);
       }
@@ -188,6 +233,9 @@ export default {
       margin-right: 116px;
       @media(max-width: 1300px) {
         margin-right: 50px;
+      }
+      @media (max-width: 1089px) {
+        display: none;
       }
       a {
         display: block;
@@ -208,6 +256,9 @@ export default {
       &-item {
         &:not(:last-child) {
           margin-right: 24px;
+          @media (max-width: 1089px) {
+            display: none;
+          }
         }
         a {
           display: block;

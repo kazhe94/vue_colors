@@ -1,27 +1,43 @@
 <template>
   <li class="product">
     <div class="product__img">
-      <img :src="'./colors/color1.png'" alt="color">
+      <img :src="product.img" alt="color">
     </div>
     <div class="product__desc">
-      <div class="product__title">Краска Wallquest, Brownsone MS90102</div>
+      <div class="product__title">{{ product.title }}</div>
       <div class="product__control">
-        <div class="product__price">6000 ₽</div>
-        <button class="product__add">+</button>
+        <div class="product__price">{{ product.price }} ₽</div>
+        <button class="product__add" @click="addToCart">+</button>
       </div>
     </div>
   </li>
 </template>
 
 <script>
+import {useStore} from "vuex";
+
 export default {
-  name: "AppProduct"
+  name: "AppProduct",
+  props: ['product'],
+  setup(props) {
+    const store = useStore()
+    const addToCart = () => {
+      store.commit('cart/add', props.product.id)
+    }
+    return {
+      addToCart
+    }
+  }
 }
 </script>
 
 <style lang="scss">
   .product {
     position: relative;
+    width: 278px;
+    @media (max-width: 1225px) {
+      width: 156px;
+    }
     &::after {
       content: '';
       position: absolute;
@@ -35,8 +51,17 @@ export default {
       display: flex;
       align-items: center;
       justify-content: center;
-      height: 278px;
       margin-bottom: 16px;
+      height: 278px;
+      @media (max-width: 1225px) {
+        height: 156px;
+        img {
+          height: 100%;
+          width: 100%;
+          object-fit: contain;
+        }
+      }
+
     }
     &__desc {
       font-size: 16px;
@@ -63,6 +88,11 @@ export default {
       font-size: 20px;
       transition: 0.3s;
       cursor: pointer;
+      @media (max-width: 1225px) {
+        width: 40px;
+        border-radius: 4px;
+        height: 24px;
+      }
       &:hover {
         background-color: var(--color-secondary);
       }

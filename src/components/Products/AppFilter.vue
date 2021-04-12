@@ -1,24 +1,24 @@
 <template>
-  <div class="filter" :class="{'active': filter}">
+  <div class="filter" :class="{'active': filterOpened}">
     <div class="filter__inner">
       <div class="checkbox">
-        <input id="new" type="checkbox">
+        <input id="new" type="checkbox" v-model="news">
         <label class="checkbox-control" for="new">Новинки</label>
       </div>
       <div class="checkbox">
-        <input id="instock" type="checkbox">
+        <input id="instock" type="checkbox" v-model="inStock">
         <label class="checkbox-control" for="instock">Есть в наличии</label>
       </div>
       <div class="checkbox">
-        <input id="contract" type="checkbox">
+        <input id="contract" type="checkbox" v-model="contract">
         <label class="checkbox-control" for="contract">Контрактные</label>
       </div>
       <div class="checkbox">
-        <input id="exclusive" type="checkbox">
+        <input id="exclusive" type="checkbox" v-model="exclusive">
         <label class="checkbox-control" for="exclusive">Эксклюзивные</label>
       </div>
       <div class="checkbox">
-        <input id="sale" type="checkbox">
+        <input id="sale" type="checkbox" v-model="sale">
         <label class="checkbox-control" for="sale">Распродажа</label>
       </div>
     </div>
@@ -27,12 +27,39 @@
 
 <script>
 
+import {ref, watch} from "vue";
+
 export default {
   name: "AppFilter",
   props: {
-    'filter': Boolean
+    filterOpened: Boolean,
+    modelValue: Object
   },
+  emits: ['update:modelValue'],
+  setup(_, {emit}) {
+    const news = ref(false)
+    const inStock = ref(false)
+    const contract = ref(false)
+    const exclusive = ref(false)
+    const sale = ref(false)
+    watch([news,inStock,contract,exclusive,sale], value => {
+      emit('update:modelValue', {
+        news: value[0],
+        inStock: value[1],
+        contract: value[2],
+        exclusive: value[3],
+        sale: value[4],
+      })
+    })
 
+    return {
+      news,
+      inStock,
+      contract,
+      exclusive,
+      sale
+    }
+  }
 }
 </script>
 
@@ -40,7 +67,7 @@ export default {
   .filter {
     min-width: 165px;
     transition: 0.3s;
-    @media (max-width: 778px) {
+    @media (max-width: 840px) {
       position: fixed;
       display: flex;
       justify-content: center;

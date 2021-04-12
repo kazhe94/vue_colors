@@ -8,37 +8,58 @@
     </div>
     <div class="cart__table">
       <div class="cart__header">
-        <div class="cart__count">4 товара</div>
-        <button class="cart__clear">Очистить список</button>
+        <div class="cart__count">{{ cartCount }} товара(-ов)</div>
+        <button class="cart__clear" @click="clearCart">Очистить список</button>
       </div>
       <div class="cart__body">
-        <cart-item></cart-item>
-        <cart-item></cart-item>
-        <cart-item></cart-item>
+        <cart-item
+            v-for="(value, key) in cart"
+            :key="key"
+            :count="value"
+            :id="key"
+        ></cart-item>
+        <h2 v-if="isEmpty" class="empty-text">Корзина пока пуста</h2>
       </div>
     </div>
     <div class="cart__summary">
       <div class="cart__summary-text">
         <div class="cart__summary-title">Итого</div>
-        <div class="cart__summary-total">14 400₽</div>
+        <div class="cart__summary-total">{{ total }}₽</div>
       </div>
-      <div class="cart__summary-btn">Оформить заказ</div>
+      <button class="cart__summary-btn" :disabled="isEmpty">Оформить заказ</button>
     </div>
   </div>
 </template>
 
 <script>
 import CartItem from "@/components/Cart/CartItem";
+import {useStore} from "vuex";
+import {computed} from "vue";
+import {useCartPage} from "@/use/useCartPage";
 
 export default {
   name: "TheCart",
   components: {
     CartItem
+  },
+  setup() {
+    const store = useStore()
+    const clearCart = () => {
+      store.commit('cart/clear')
+    }
+    return {
+      ...useCartPage(),
+      clearCart
+    }
   }
 }
 </script>
 
 <style scoped lang="scss">
+  .empty-text {
+    padding-top: 20px;
+    border-top: 1px solid rgba(#000, 0.1);
+  }
   .cart {
     position: fixed;
     right: 0;
@@ -46,7 +67,8 @@ export default {
     z-index: 20;
     width: 600px;
     height: 100vh;
-    padding: 40px;
+    overflow: scroll;
+    padding: 40px 40px 126px 40px;
     background-color: #fff;
     &__top {
       display: flex;
