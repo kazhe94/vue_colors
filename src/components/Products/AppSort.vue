@@ -1,7 +1,7 @@
 <template>
   <div class="select">
     <p
-        @click="optionOpened = !optionOpened"
+        @click="$emit('watchOptions')"
     >
       {{ modelValue.text }}
       <span>&#9660;</span>
@@ -33,7 +33,7 @@ export default {
     modelValue: Object,
     optionOpened: Boolean
   },
-  emits: ['update:modelValue', 'closeSort'],
+  emits: ['update:modelValue', 'closeSort', 'watchOptions'],
   setup(_, {emit}) {
     const selected = ref()
     const selectOption = (option) => {

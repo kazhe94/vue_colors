@@ -1,5 +1,5 @@
 <template>
-  <div class="cart-item">
+  <li class="cart-item" :class="{'deleted': !count}">
     <div class="cart-item__image">
       <img :src="product.img" alt="color">
     </div>
@@ -8,13 +8,13 @@
       <h4 class="cart-item__price product__price">{{ product.price }} ₽</h4>
     </div>
     <cart-controls :count="count" :id="id"></cart-controls>
-  </div>
+  </li>
 </template>
 
 <script>
 import CartControls from "@/components/Cart/CartControls";
 import {useStore} from "vuex";
-import {computed} from "vue";
+import {computed, ref} from "vue";
 
 export default {
   name: "CartItem",
@@ -26,7 +26,7 @@ export default {
     const store = useStore()
     const product = computed(() => store.getters['products/products'].find(item => item.id == props.id))
     return {
-      product
+      product,
     }
   }
 }
@@ -55,5 +55,8 @@ export default {
       font-size: 16px;
       margin-bottom: 16px;
     }
+  }
+  .deleted>:not(:last-child) {
+    opacity: 0.4;
   }
 </style>

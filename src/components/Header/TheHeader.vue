@@ -76,7 +76,6 @@ export default {
     const store = useStore()
     const burger = ref(false)
     const cartCount = computed(() => store.getters['cart/cartCount'])
-    console.log(cartCount.value)
     return {
       burger,
       cartCount

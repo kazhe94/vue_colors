@@ -2,7 +2,7 @@
   <div class="filter" :class="{'active': filterOpened}">
     <div class="filter__inner">
       <div class="checkbox">
-        <input id="new" type="checkbox" v-model="news">
+        <input id="new" type="checkbox" v-model="fresh">
         <label class="checkbox-control" for="new">Новинки</label>
       </div>
       <div class="checkbox">
@@ -37,14 +37,14 @@ export default {
   },
   emits: ['update:modelValue'],
   setup(_, {emit}) {
-    const news = ref(false)
+    const fresh = ref(false)
     const inStock = ref(false)
     const contract = ref(false)
     const exclusive = ref(false)
     const sale = ref(false)
-    watch([news,inStock,contract,exclusive,sale], value => {
+    watch([fresh,inStock,contract,exclusive,sale], value => {
       emit('update:modelValue', {
-        news: value[0],
+        fresh: value[0],
         inStock: value[1],
         contract: value[2],
         exclusive: value[3],
@@ -53,7 +53,7 @@ export default {
     })
 
     return {
-      news,
+      fresh,
       inStock,
       contract,
       exclusive,

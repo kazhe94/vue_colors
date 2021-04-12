@@ -20,6 +20,7 @@
                 v-model="sort"
                 :optionOpened="optionOpened"
                 @closeSort="optionOpened = false"
+                @watchOptions="optionOpened = !optionOpened"
             ></app-sort>
           </div>
         </div>
@@ -34,7 +35,10 @@
     </div>
   </div>
   <teleport to="body">
-    <app-backdrop v-if="filterOpened || cart" @close="filterOpened = false"></app-backdrop>
+    <app-backdrop
+        v-if="filterOpened || cart || optionOpened"
+        @close="filterOpened = false; cart = false; optionOpened = false"
+    ></app-backdrop>
   </teleport>
   <teleport to="body">
     <transition name="slide">
@@ -78,24 +82,36 @@ export default {
     const optionOpened = ref(false)
     const cart = ref(false)
     const filter = ref({
-      news: false,
+      fresh: false,
       inStock: false,
       contract: false,
       exclusive: false,
       sale: false
     })
+    console.log(Object.keys(filter.value))
     const sort = ref({
       text: 'Сначала дорогие',
       value: 'expensive'
     })
     const options = [
-      {text: 'Сначала недорогие', value: 'cheap'},
       {text: 'Сначала дорогие', value: 'expensive'},
+      {text: 'Сначала недорогие', value: 'cheap'},
       {text: 'Сначала популярные', value: 'popular'},
       {text: 'Сначала новые', value: 'new'},
     ]
-    const products = computed(() => store.getters['products/products'])
-    console.log(products.value)
+    const products = computed(() => store.getters['products/products'].sort((a,b) => {
+        if(sort.value.value === 'expensive') {
+          return b.price - a.price
+        }
+        if(sort.value.value === 'cheap') {
+          return a.price - b.price
+        }
+        return b.price - a.price
+      })
+    )
+    watch(cart, value => {
+      value ? document.body.classList.add('no-scroll') : document.body.classList.remove('no-scroll')
+    })
     return {
       filterOpened,
       cart,

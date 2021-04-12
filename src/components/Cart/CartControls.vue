@@ -1,12 +1,14 @@
 <template>
   <div class="cart-controls">
     <div class="cart-controls__count">
-      <button class="cart-controls__btn" @click="remove">-</button>
+      <button class="cart-controls__btn" @click="remove" :disabled="!count">-</button>
       <div class="cart-controls__quantity">{{ count }}</div>
-      <button class="cart-controls__btn" @click="add">+</button>
+      <button class="cart-controls__btn" @click="add" :disabled="!count">+</button>
     </div>
-    <button class="cart-controls__remove">
+    <button v-if="count" class="cart-controls__remove" @click="deleteItem">
       <span></span>
+    </button>
+    <button v-else class="cart-controls__renew" @click="add">
     </button>
   </div>
 </template>
@@ -25,9 +27,13 @@ export default {
     const remove = () => {
       store.commit('cart/remove', props.id)
     }
+    const deleteItem = () => {
+      store.commit('cart/deleteItem', props.id)
+    }
     return {
       add,
-      remove
+      remove,
+      deleteItem
     }
   }
 }
@@ -58,6 +64,14 @@ export default {
     }
     &__quantity {
       margin: 0 20px;
+    }
+    &__renew {
+      width: 24px;
+      height: 24px;
+      border: none;
+      background-color: transparent;
+      cursor: pointer;
+      background-image: url(../../assets/icons/repeat.svg);
     }
     &__remove {
       background-color: transparent;

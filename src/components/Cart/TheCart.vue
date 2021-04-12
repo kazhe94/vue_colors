@@ -11,7 +11,7 @@
         <div class="cart__count">{{ cartCount }} товара(-ов)</div>
         <button class="cart__clear" @click="clearCart">Очистить список</button>
       </div>
-      <div class="cart__body">
+      <ul class="cart__body">
         <cart-item
             v-for="(value, key) in cart"
             :key="key"
@@ -19,7 +19,7 @@
             :id="key"
         ></cart-item>
         <h2 v-if="isEmpty" class="empty-text">Корзина пока пуста</h2>
-      </div>
+      </ul>
     </div>
     <div class="cart__summary">
       <div class="cart__summary-text">
@@ -55,7 +55,7 @@ export default {
 }
 </script>
 
-<style scoped lang="scss">
+<style lang="scss">
   .empty-text {
     padding-top: 20px;
     border-top: 1px solid rgba(#000, 0.1);
@@ -67,8 +67,8 @@ export default {
     z-index: 20;
     width: 600px;
     height: 100vh;
-    overflow: scroll;
-    padding: 40px 40px 126px 40px;
+    padding: 40px;
+    overflow: auto;
     background-color: #fff;
     &__top {
       display: flex;
@@ -136,14 +136,18 @@ export default {
         border-color: rgba(#000, 0.4);
       }
     }
+    &__body {
+      margin-bottom: 126px;
+    }
     &__summary {
-      position: absolute;
+      position: fixed;
       bottom: 0;
-      left: 0;
-      width: 100%;
-      padding: 0 40px 40px;
+      right: 0;
+      width: 600px;
+      padding: 40px 40px;
       display: flex;
       align-items: center;
+      background-color: #fff;
       justify-content: space-between;
       &-title {
         font-size: 16px;

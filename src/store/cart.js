@@ -2,7 +2,7 @@ export default {
     namespaced: true,
     state() {
         return {
-            cart: {}
+            cart: {},
         }
     },
     mutations: {
@@ -15,7 +15,6 @@ export default {
             }
             const count = state.cart[id]
             state.cart[id] = count + 1
-            console.log(state.cart)
         },
         remove(state, id) {
             const count = state.cart[id]
@@ -23,6 +22,10 @@ export default {
             if(count <= 1) {
                 delete state.cart[id]
             }
+        },
+        deleteItem(state, id) {
+            state.cart[id] = 0
+            console.log(state.cart)
         }
     },
     getters: {
