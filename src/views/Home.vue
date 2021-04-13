@@ -88,7 +88,7 @@ export default {
       exclusive: false,
       sale: false
     })
-    console.log(Object.keys(filter.value))
+
     const sort = ref({
       text: 'Сначала дорогие',
       value: 'expensive'
@@ -108,6 +108,10 @@ export default {
         }
         return b.price - a.price
       })
+        .filter(el => {
+          const commonKeys = Object.keys(filter.value).filter(key => filter.value[key]);
+          return commonKeys.length ? commonKeys.includes(el.type) : el
+        })
     )
     watch(cart, value => {
       value ? document.body.classList.add('no-scroll') : document.body.classList.remove('no-scroll')
