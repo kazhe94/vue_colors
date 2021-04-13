@@ -43,6 +43,9 @@ export default {
   .cart-controls {
     display: flex;
     align-items: center;
+    @media (max-width: 468px) {
+      margin-top: 18px;
+    }
     &__count {
       display: flex;
       align-items: center;

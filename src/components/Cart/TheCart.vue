@@ -70,6 +70,9 @@ export default {
     padding: 40px;
     overflow: auto;
     background-color: #fff;
+    @media (max-width: 778px) {
+      width: 100%;
+    }
     &__top {
       display: flex;
       justify-content: space-between;
@@ -149,6 +152,9 @@ export default {
       align-items: center;
       background-color: #fff;
       justify-content: space-between;
+      @media (max-width: 610px) {
+        width: 100%;
+      }
       &-title {
         font-size: 16px;
         margin-bottom: 6px;
@@ -157,6 +163,9 @@ export default {
         font-size: 30px;
         font-weight: 500;
         line-height: 1;
+        @media (max-width: 468px) {
+          font-size: 24px;
+        }
       }
       &-btn {
         width: 240px;
@@ -171,6 +180,11 @@ export default {
         font-weight: 500;
         cursor: pointer;
         transition: 0.3s;
+        @media (max-width: 468px) {
+          width: 160px;
+          height: 40px;
+          line-height: 40px;
+        }
         &:hover {
           opacity: 0.8;
         }

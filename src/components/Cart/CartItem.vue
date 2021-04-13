@@ -38,6 +38,13 @@ export default {
     align-items: center;
     padding: 26px 0;
     border-top: 1px solid rgba(#000, 0.1);
+    @media (max-width: 778px) {
+      justify-content: center;
+    }
+    @media (max-width: 468px) {
+      flex-wrap: wrap;
+    }
+
     &__image {
       margin-right: 8px;
       img {
@@ -50,6 +57,9 @@ export default {
     &__desc {
       width: 165px;
       margin-right: 62px;
+      @media (max-width: 468px) {
+        margin-right: 0;
+      }
     }
     &__title {
       font-size: 16px;
